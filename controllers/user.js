@@ -1,19 +1,36 @@
 const User = require("../models/user");
 
 async function handleUserSignup(req, res) {
-    const {
-        fullname, 
-        email, 
-        password 
-    } = req.body;
+    try {
+        const {
+            fullname, 
+            email, 
+            password 
+        } = req.body;
 
-    await User.create({
-        fullname, 
-        email, 
-        password, 
-    });
+        await User.create({
+            fullname, 
+            email, 
+            password, 
+        });
 
-    return res.redirect('/');
+        const token = await User.matchPasswordAndGenerateToken(email, password);
+        return res.status(200).cookie('uid', token).redirect('/');
+    }
+    catch(err) {
+        if (err.code === 11000) {
+            return res.status(409).render('signup', {
+                pageTitle: 'Signup',
+                error: 'An account with this email already exists.',
+                currentPath: '/signup',
+            });
+        }
+        return res.status(500).render('signup', {
+            pageTitle: 'Signup',
+            error: 'Something went wrong. Please try again.',
+            currentPath: '/signup',
+        });
+    }
 }
 
 async function handleUserSignin(req, res) {
@@ -31,7 +48,7 @@ async function handleUserSignin(req, res) {
 }
 
 function handleUSerLogout(req, res) {
-    res.clearCookie('uid').redirect('/');
+    res.status(200).clearCookie('uid').redirect('/');
 }
 
 module.exports = {
