@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('./partials/head.ejs') %>
+    <body>
+        <%- include('./partials/navbar.ejs') %>
+
+        <div class="container mt-4">
+            <form action="/blog" method="post" enctype="multipart/form-data">
+                <div class="form-group mb-3">
+                    <label for="title">Blog title</label>
+                    <input type="text" name="title" class="form-control" id="title" placeholder="Enter blog title">
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="body">Example textarea</label>
+                    <textarea class="form-control" name="body" id="body" rows="3"></textarea>
+                </div>
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="coverImage">
+                            Upload Cover Image
+                        </span>
+                    </div>
+
+                    <div class="custom-file">
+                        <input
+                            type="file"
+                            class="custom-file-input"
+                            id="coverImage"
+                            name="coverImage"
+                            accept="image/*"
+                            aria-describedby="coverImage"
+                        >
+
+                        <label class="custom-file-label" for="coverImage">
+                            Choose file
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Publish</button>
+            </form>
+        </div>
+
+        <%- include('./partials/scripts.ejs') %>
+    </body>
+</html>
